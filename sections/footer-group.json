@@ -1,0 +1,39 @@
+{
+  "type": "footer",
+  "name": "Footer group",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "settings": {
+        "about_text": "Modern streetwear for the bold. Designed for Gen Z.",
+        "show_payment_icons": true
+      },
+      "blocks": {
+        "menu-1": {
+          "type": "menu",
+          "settings": {
+            "heading": "Shop"
+          }
+        },
+        "menu-2": {
+          "type": "menu",
+          "settings": {
+            "heading": "Help"
+          }
+        },
+        "newsletter": {
+          "type": "newsletter",
+          "settings": {
+            "heading": "Stay Updated",
+            "description": "Get exclusive drops and early access.",
+            "placeholder": "Enter your email"
+          }
+        }
+      },
+      "block_order": ["menu-1", "menu-2", "newsletter"]
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}

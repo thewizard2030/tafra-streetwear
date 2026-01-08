@@ -1,0 +1,157 @@
+{% style %}
+  {% comment %} Load font faces {% endcomment %}
+  {{ settings.type_heading_font | font_face: font_display: 'swap' }}
+  {{ settings.type_heading_font | font_modify: 'weight', 'bold' | font_face: font_display: 'swap' }}
+  {{ settings.type_body_font | font_face: font_display: 'swap' }}
+  {{ settings.type_body_font | font_modify: 'weight', 'bold' | font_face: font_display: 'swap' }}
+
+  :root {
+    /* ========================================
+       TYPOGRAPHY
+    ======================================== */
+    --font-heading: {{ settings.type_heading_font.family }}, {{ settings.type_heading_font.fallback_families }};
+    --font-heading-weight: {{ settings.type_heading_font.weight }};
+    --font-heading-style: {{ settings.type_heading_font.style }};
+
+    --font-body: {{ settings.type_body_font.family }}, {{ settings.type_body_font.fallback_families }};
+    --font-body-weight: {{ settings.type_body_font.weight }};
+    --font-body-style: {{ settings.type_body_font.style }};
+
+    --heading-scale: {{ settings.heading_scale | divided_by: 100.0 }};
+    --body-scale: {{ settings.body_scale | divided_by: 100.0 }};
+
+    /* Font sizes */
+    --text-xs: calc(0.75rem * var(--body-scale));
+    --text-sm: calc(0.875rem * var(--body-scale));
+    --text-base: calc(1rem * var(--body-scale));
+    --text-lg: calc(1.125rem * var(--body-scale));
+    --text-xl: calc(1.25rem * var(--body-scale));
+    --text-2xl: calc(1.5rem * var(--heading-scale));
+    --text-3xl: calc(1.875rem * var(--heading-scale));
+    --text-4xl: calc(2.25rem * var(--heading-scale));
+    --text-5xl: calc(3rem * var(--heading-scale));
+    --text-6xl: calc(3.75rem * var(--heading-scale));
+    --text-7xl: calc(4.5rem * var(--heading-scale));
+
+    /* ========================================
+       COLORS
+    ======================================== */
+    --color-background: {{ settings.color_background }};
+    --color-foreground: {{ settings.color_foreground }};
+    --color-surface: {{ settings.color_surface }};
+    --color-surface-elevated: {{ settings.color_surface_elevated }};
+    --color-border: {{ settings.color_border }};
+    --color-accent: {{ settings.color_accent }};
+    --color-accent-foreground: {{ settings.color_accent_foreground }};
+    --color-text-muted: {{ settings.color_text_muted }};
+    --color-text-subtle: {{ settings.color_text_subtle }};
+
+    /* Accent variations */
+    --color-accent-hover: {{ settings.color_accent | color_lighten: 10 }};
+    --color-accent-active: {{ settings.color_accent | color_darken: 10 }};
+    --color-accent-glow: {{ settings.color_accent | color_modify: 'alpha', 0.4 }};
+
+    /* Semantic colors */
+    --color-success: #22C55E;
+    --color-warning: #F59E0B;
+    --color-error: #EF4444;
+    --color-info: #3B82F6;
+
+    /* ========================================
+       LAYOUT
+    ======================================== */
+    --page-width: {{ settings.max_page_width }};
+    --page-margin: {{ settings.min_page_margin }}px;
+    --section-spacing: {{ settings.section_spacing }}px;
+    --border-radius: {{ settings.border_radius }}px;
+    --button-border-radius: {{ settings.button_border_radius }}px;
+
+    /* Spacing scale */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.25rem;
+    --space-6: 1.5rem;
+    --space-8: 2rem;
+    --space-10: 2.5rem;
+    --space-12: 3rem;
+    --space-16: 4rem;
+    --space-20: 5rem;
+    --space-24: 6rem;
+
+    /* ========================================
+       ANIMATIONS
+    ======================================== */
+    {% case settings.animation_speed %}
+      {% when 'fast' %}
+        --duration-fast: 100ms;
+        --duration-normal: 150ms;
+        --duration-slow: 250ms;
+      {% when 'slow' %}
+        --duration-fast: 200ms;
+        --duration-normal: 350ms;
+        --duration-slow: 500ms;
+      {% else %}
+        --duration-fast: 150ms;
+        --duration-normal: 250ms;
+        --duration-slow: 350ms;
+    {% endcase %}
+
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    /* ========================================
+       SHADOWS
+    ======================================== */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.5);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+    --shadow-glow: 0 0 20px var(--color-accent-glow);
+
+    /* ========================================
+       Z-INDEX
+    ======================================== */
+    --z-dropdown: 100;
+    --z-sticky: 200;
+    --z-drawer: 300;
+    --z-modal: 400;
+    --z-toast: 500;
+
+    /* ========================================
+       HEADER
+    ======================================== */
+    --header-height: 72px;
+    --header-height-mobile: 64px;
+
+    /* ========================================
+       PRODUCT GRID
+    ======================================== */
+    --product-card-gap: var(--space-4);
+    --product-image-ratio: 4/5;
+  }
+
+  /* Dark scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-surface);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-text-muted);
+  }
+
+  /* Selection */
+  ::selection {
+    background: var(--color-accent);
+    color: var(--color-accent-foreground);
+  }
+{% endstyle %}

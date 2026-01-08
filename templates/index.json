@@ -1,0 +1,38 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "subheading": "New Collection",
+        "heading": "Street Culture Redefined",
+        "description": "Discover the latest drops in avant-garde streetwear designed for the bold.",
+        "text_alignment": "left",
+        "button_label": "Shop Now",
+        "button_label_2": "View Lookbook",
+        "overlay_opacity": 40,
+        "show_scroll_indicator": true
+      }
+    },
+    "featured-collection": {
+      "type": "featured-collection",
+      "settings": {
+        "subheading": "New Arrivals",
+        "heading": "Latest Drops",
+        "products_to_show": 8
+      }
+    },
+    "featured-collection-2": {
+      "type": "featured-collection",
+      "settings": {
+        "subheading": "Trending",
+        "heading": "Best Sellers",
+        "products_to_show": 8
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "featured-collection",
+    "featured-collection-2"
+  ]
+}

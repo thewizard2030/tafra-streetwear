@@ -1,0 +1,342 @@
+{% comment %}
+  Product Card Component
+
+  Usage:
+  {% render 'product-card', product: product, show_vendor: false, show_quick_add: true %}
+{% endcomment %}
+
+{% liquid
+  assign show_vendor = show_vendor | default: false
+  assign show_quick_add = show_quick_add | default: true
+  assign show_swatches = show_swatches | default: true
+  assign lazy_load = lazy_load | default: true
+%}
+
+<article class="product-card" data-product-card>
+  <!-- Image Container -->
+  <div class="product-card__media">
+    <a href="{{ product.url }}" class="product-card__link" tabindex="-1" aria-hidden="true">
+      {% if product.featured_image %}
+        <img
+          class="product-card__image product-card__image--primary"
+          src="{{ product.featured_image | image_url: width: 600 }}"
+          srcset="
+            {{ product.featured_image | image_url: width: 300 }} 300w,
+            {{ product.featured_image | image_url: width: 450 }} 450w,
+            {{ product.featured_image | image_url: width: 600 }} 600w
+          "
+          sizes="(max-width: 768px) 50vw, 25vw"
+          alt="{{ product.featured_image.alt | default: product.title }}"
+          width="{{ product.featured_image.width }}"
+          height="{{ product.featured_image.height }}"
+          {% if lazy_load %}
+            loading="lazy" decoding="async"
+          {% endif %}
+        >
+        {% if product.images.size > 1 %}
+          <img
+            class="product-card__image product-card__image--secondary"
+            src="{{ product.images[1] | image_url: width: 600 }}"
+            alt="{{ product.images[1].alt | default: product.title }}"
+            width="{{ product.images[1].width }}"
+            height="{{ product.images[1].height }}"
+            loading="lazy"
+            decoding="async"
+          >
+        {% endif %}
+      {% else %}
+        <div class="product-card__placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+            <polyline points="21 15 16 10 5 21"></polyline>
+          </svg>
+        </div>
+      {% endif %}
+    </a>
+
+    <!-- Badges -->
+    <div class="product-card__badges">
+      {% if product.available == false %}
+        <span class="badge badge-soldout">Sold Out</span>
+      {% elsif product.compare_at_price > product.price %}
+        {% assign discount = product.compare_at_price
+          | minus: product.price
+          | times: 100
+          | divided_by: product.compare_at_price
+        %}
+        <span class="badge badge-sale">-{{ discount }}%</span>
+      {% endif %}
+
+      {% assign now = 'now' | date: '%s' %}
+      {% assign published = product.published_at | date: '%s' %}
+      {% assign days_since = now | minus: published | divided_by: 86400 %}
+      {% if days_since < 14 and product.available %}
+        <span class="badge badge-new">New</span>
+      {% endif %}
+    </div>
+
+    <!-- Quick Add -->
+    {% if show_quick_add and product.available %}
+      <div class="product-card__quick-add">
+        {% if product.variants.size == 1 %}
+          <form action="/cart/add" method="post">
+            <input type="hidden" name="id" value="{{ product.first_available_variant.id }}">
+            <button type="submit" class="btn btn-primary btn-full">Add to Cart</button>
+          </form>
+        {% else %}
+          <a href="{{ product.url }}" class="btn btn-primary btn-full"> Choose Options </a>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <!-- Wishlist -->
+    <button class="product-card__wishlist" aria-label="Add to wishlist">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Info -->
+  <div class="product-card__info">
+    {% if show_vendor and product.vendor %}
+      <p class="product-card__vendor">{{ product.vendor }}</p>
+    {% endif %}
+
+    <h3 class="product-card__title">
+      <a href="{{ product.url }}">{{ product.title }}</a>
+    </h3>
+
+    <div class="product-card__price">
+      {% if product.compare_at_price > product.price %}
+        <span class="product-card__price--sale">{{ product.price | money }}</span>
+        <span class="product-card__price--compare">{{ product.compare_at_price | money }}</span>
+      {% else %}
+        <span>{{ product.price | money }}</span>
+      {% endif %}
+    </div>
+
+    <!-- Color Swatches -->
+    {% if show_swatches %}
+      {% assign color_option = product.options_by_name.Color %}
+      {% if color_option and color_option.values.size > 1 %}
+        <div class="product-card__swatches">
+          {% for value in color_option.values limit: 5 %}
+            {% assign handle = value | handleize %}
+            <span
+              class="product-card__swatch"
+              style="background-color: {{ handle }};"
+              title="{{ value }}"
+            ></span>
+          {% endfor %}
+          {% if color_option.values.size > 5 %}
+            <span class="product-card__swatch-more">+{{ color_option.values.size | minus: 5 }}</span>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% endif %}
+  </div>
+</article>
+
+{% stylesheet %}
+  .product-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Media Container */
+  .product-card__media {
+    position: relative;
+    aspect-ratio: var(--product-image-ratio, 4/5);
+    overflow: hidden;
+    background-color: var(--color-surface);
+    border-radius: var(--border-radius);
+  }
+
+  .product-card__link {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .product-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-slow) var(--ease-out), opacity var(--duration-normal) var(--ease-out);
+  }
+
+  .product-card__image--secondary {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+  }
+
+  .product-card:hover .product-card__image--primary {
+    transform: scale(1.05);
+  }
+
+  .product-card:hover .product-card__image--secondary {
+    opacity: 1;
+  }
+
+  .product-card__placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-surface);
+    color: var(--color-text-subtle);
+  }
+
+  .product-card__placeholder svg {
+    width: 48px;
+    height: 48px;
+  }
+
+  /* Badges */
+  .product-card__badges {
+    position: absolute;
+    top: var(--space-3);
+    left: var(--space-3);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    z-index: 2;
+  }
+
+  /* Quick Add */
+  .product-card__quick-add {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: var(--space-4);
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity var(--duration-normal) var(--ease-out), transform var(--duration-normal) var(--ease-out);
+    z-index: 2;
+  }
+
+  .product-card:hover .product-card__quick-add {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Wishlist */
+  .product-card__wishlist {
+    position: absolute;
+    top: var(--space-3);
+    right: var(--space-3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: var(--color-background);
+    border: none;
+    border-radius: 50%;
+    color: var(--color-foreground);
+    cursor: pointer;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out), background-color var(--duration-fast) var(--ease-out);
+    z-index: 2;
+  }
+
+  .product-card:hover .product-card__wishlist {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .product-card__wishlist:hover {
+    color: var(--color-accent);
+    background-color: var(--color-surface-elevated);
+  }
+
+  /* Info */
+  .product-card__info {
+    padding: var(--space-4) 0;
+  }
+
+  .product-card__vendor {
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-subtle);
+    margin-bottom: var(--space-1);
+  }
+
+  .product-card__title {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    line-height: 1.4;
+    margin-bottom: var(--space-2);
+  }
+
+  .product-card__title a {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .product-card__title a:hover {
+    color: var(--color-accent);
+  }
+
+  .product-card__price {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    font-weight: 600;
+  }
+
+  .product-card__price--sale {
+    color: var(--color-accent);
+  }
+
+  .product-card__price--compare {
+    color: var(--color-text-subtle);
+    text-decoration: line-through;
+    font-weight: 400;
+  }
+
+  /* Swatches */
+  .product-card__swatches {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+  }
+
+  .product-card__swatch {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 1px solid var(--color-border);
+  }
+
+  .product-card__swatch-more {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
+  /* Touch devices */
+  @media (hover: none) {
+    .product-card__quick-add,
+    .product-card__wishlist {
+      opacity: 1;
+      transform: none;
+    }
+  }
+{% endstylesheet %}

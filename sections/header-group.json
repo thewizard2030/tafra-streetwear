@@ -1,0 +1,26 @@
+{
+  "type": "header",
+  "name": "Header group",
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "settings": {
+        "show_announcement": true,
+        "text": "FREE SHIPPING ON ORDERS OVER $100",
+        "enable_scroll": true,
+        "background_color": "#FF3D00",
+        "text_color": "#FFFFFF"
+      }
+    },
+    "header": {
+      "type": "header",
+      "settings": {
+        "logo_width": 120
+      }
+    }
+  },
+  "order": [
+    "announcement-bar",
+    "header"
+  ]
+}

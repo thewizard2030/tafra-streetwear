@@ -1,0 +1,37 @@
+{
+  "current": {
+    "type_heading_font": "assistant_n7",
+    "type_body_font": "assistant_n4",
+    "heading_scale": 100,
+    "body_scale": 100,
+    "color_background": "#0A0A0A",
+    "color_foreground": "#FFFFFF",
+    "color_surface": "#141414",
+    "color_surface_elevated": "#1C1C1C",
+    "color_border": "#2A2A2A",
+    "color_accent": "#FF3D00",
+    "color_accent_foreground": "#FFFFFF",
+    "color_text_muted": "#888888",
+    "color_text_subtle": "#666666",
+    "max_page_width": "1400px",
+    "min_page_margin": 24,
+    "section_spacing": 64,
+    "border_radius": 8,
+    "button_border_radius": 4,
+    "button_style": "solid",
+    "enable_animations": true,
+    "animation_speed": "normal",
+    "cart_type": "drawer",
+    "show_cart_note": false
+  },
+  "presets": {
+    "Default": {
+      "type_heading_font": "assistant_n7",
+      "type_body_font": "assistant_n4",
+      "color_background": "#0A0A0A",
+      "color_foreground": "#FFFFFF",
+      "color_surface": "#141414",
+      "color_accent": "#FF3D00"
+    }
+  }
+}
