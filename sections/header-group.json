@@ -1,21 +1,34 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "type": "header",
   "name": "Header group",
   "sections": {
     "announcement-bar": {
       "type": "announcement-bar",
+      "disabled": true,
       "settings": {
         "show_announcement": true,
         "text": "FREE SHIPPING ON ORDERS OVER $100",
+        "link": "",
         "enable_scroll": true,
-        "background_color": "#FF3D00",
-        "text_color": "#FFFFFF"
+        "background_color": "#ff3d00",
+        "text_color": "#ffffff"
       }
     },
     "header": {
       "type": "header",
       "settings": {
-        "logo_width": 120
+        "logo": "shopify://shop_images/WhatsApp_Image_2025-12-06_at_6.04.35_PM_9bc468f2-a749-4c21-9445-7f60bf04428e.jpg",
+        "logo_width": 120,
+        "menu": "main-menu"
       }
     }
   },
